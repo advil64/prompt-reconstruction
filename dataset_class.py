@@ -41,7 +41,7 @@ class TextDataset(Dataset):
         text = self._read_text(img_path)
         
         if self.vectorize:
-            vector = self.tfidf_vectors.getrow(idx).toarray()
+            vector = self.tfidf_vectors.getrow(idx).toarray()[0]
             return text, label, vector
         
         return text, label
