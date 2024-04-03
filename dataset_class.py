@@ -47,5 +47,5 @@ class TextDataset(Dataset):
         return text, label
     
     def _build_vocab_and_idf(self):
-        vectorizer = TfidfVectorizer()
+        vectorizer = TfidfVectorizer(input='filename', stop_words='english')
         self.tfidf_vectors = vectorizer.fit_transform(self.samples)
