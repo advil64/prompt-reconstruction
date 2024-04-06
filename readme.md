@@ -13,4 +13,9 @@
 - [ ] Use word2vec to generate the vectors (embeddings) and see if that performs better than the tfidf vectors
 - [ ] Create a basic Multi Layer Perceptron into which the vectors are inputs and maps to 1 of 100 labels
 - [ ] Experiment with LSTMs
+- [ ] Generate More Data
+- [ ] Fix Confusion Matrix
+- [ ] Fix Label Encodings (possibly broken unsure)
+- [ ] Improve Model Architecture
+- [ ] Find Features (stat. analysis of current output)
 - [ ] Slides + Paper
