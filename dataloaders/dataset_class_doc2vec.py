@@ -1,14 +1,16 @@
 import os
-import chardet
-import numpy as np
 import random
-from torch.utils.data import Dataset
+import unicodedata
+
+import chardet
+import nltk
+import numpy as np
 from gensim.models import Doc2Vec
 from gensim.models.doc2vec import TaggedDocument
 from gensim.utils import simple_preprocess
-import nltk
-import unicodedata
 from nltk.corpus import stopwords
+from torch.utils.data import Dataset
+
 nltk.download('stopwords')
 nltk.download('punkt')
 

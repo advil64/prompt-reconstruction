@@ -1,13 +1,13 @@
 import os
 
 import chardet
+import nltk
 import numpy as np
-from torch.utils.data import Dataset
+import torch
 from gensim.models import Word2Vec
 from gensim.utils import simple_preprocess
 from nltk.tokenize import sent_tokenize
-import nltk
-import torch
+from torch.utils.data import Dataset
 
 nltk.download('punkt')  # Make sure to have the punkt tokenizer downloaded
 

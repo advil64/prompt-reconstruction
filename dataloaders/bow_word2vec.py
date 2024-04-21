@@ -1,4 +1,4 @@
-from dataset_class_word2vec import TextDatasetWord2Vec
+from dataloaders.dataset_class_word2vec import TextDatasetWord2Vec
 from torch.utils.data import DataLoader, random_split
 
 data = TextDatasetWord2Vec('diff-files-new')
