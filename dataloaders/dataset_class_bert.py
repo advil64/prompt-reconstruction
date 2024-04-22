@@ -10,9 +10,54 @@ from transformers import BertModel, BertTokenizer
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(device)
 
+personalities = sorted([
+    # Authors
+    "William Shakespeare", "Jane Austen", "George Orwell", "J.K. Rowling",
+    "Ernest Hemingway", "Mark Twain", "Charles Dickens", "Leo Tolstoy",
+    "Agatha Christie", "Virginia Woolf",
+    "Haruki Murakami", "Gabriel García Márquez", "Toni Morrison", "Franz Kafka",
+    "Fyodor Dostoevsky", "James Baldwin", "Chimamanda Ngozi Adichie", "Salman Rushdie",
+    "Octavia E. Butler", "Langston Hughes",
+
+    # Politicians
+    "Nelson Mandela", "Winston Churchill", "Margaret Thatcher", "Barack Obama",
+    "Mahatma Gandhi", "Angela Merkel", "Abraham Lincoln", "John F. Kennedy",
+    "Vladimir Putin", "Xi Jinping",
+    "Franklin D. Roosevelt", "Indira Gandhi", "Simón Bolívar", "Benazir Bhutto",
+    "Theodore Roosevelt", "Emmanuel Macron", "Jacinda Ardern", "Luiz Inácio Lula da Silva",
+    "Aung San Suu Kyi",
+
+    # Musicians
+    "Ludwig van Beethoven", "Wolfgang Amadeus Mozart", "Bob Dylan", "The Beatles",
+    "Michael Jackson", "Madonna", "Beyoncé", "David Bowie", "Elvis Presley",
+    "Freddie Mercury",
+    "Prince", "Aretha Franklin", "Johann Sebastian Bach", "Amy Winehouse",
+    "Tupac Shakur", "Lady Gaga", "Bob Marley", "Nina Simone", "Jimi Hendrix",
+    "Whitney Houston",
+
+    # Historical Figures
+    "Albert Einstein", "Martin Luther King Jr.", "Leonardo da Vinci", "Cleopatra",
+    "Julius Caesar", "Joan of Arc", "Galileo Galilei", "Isaac Newton",
+    "Napoleon Bonaparte", "Alexander the Great",
+    "Confucius", "Socrates", "Marie Curie", "Genghis Khan", "Rosa Parks",
+    "Queen Elizabeth I", "Charles Darwin", "Harriet Tubman", "Sigmund Freud",
+    "Anne Frank",
+
+    # Actors
+    "Marilyn Monroe", "Audrey Hepburn", "Marlon Brando", "Meryl Streep",
+    "Leonardo DiCaprio", "Denzel Washington", "Tom Hanks", "Natalie Portman",
+    "Brad Pitt", "Angelina Jolie",
+    "Sidney Poitier", "Cate Blanchett", "Daniel Day-Lewis", "Viola Davis",
+    "Heath Ledger", "Charlize Theron", "Joaquin Phoenix", "Lupita Nyong'o",
+    "Keanu Reeves", "Saoirse Ronan",
+
+    #Other
+    "Simón Bolívar"
+])
+
 class TextDataset(Dataset):
 
-    def __init__(self, root_dir, vectorize=False):
+    def __init__(self, root_dir, vectorize=1):
         self.labels = []
         self.samples = []
         self.tfidf_vectors = None
@@ -20,10 +65,13 @@ class TextDataset(Dataset):
 
         self.vectorize = vectorize
         self.root_dir = root_dir
+        self.personalities = personalities
 
         self._load_dataset()
-        if vectorize:
+        if vectorize == 1:
             self._get_bert_embeddings()
+        elif vectorize == 2:
+            self._build_vocab_and_idf()
 
     def _load_dataset(self):
         for label in os.listdir(self.root_dir):
@@ -44,12 +92,15 @@ class TextDataset(Dataset):
 
     def __getitem__(self, idx):
         img_path = self.samples[idx]
-        label = self.labels[idx]
+        label = self.personalities.index(self.labels[idx])
         text = self._read_text(img_path)
         
-        if self.vectorize:
+        if self.vectorize == 1:
             vector = self.bert_vectors[idx]
             return text, label, vector
+        elif self.vectorize == 2:
+            vector = self.tfidf_vectors.getrow(idx).toarray()[0]
+            return text, label, vector            
         
         return text, label
     
