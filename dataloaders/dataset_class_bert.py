@@ -106,10 +106,10 @@ class TextDataset(Dataset):
     
     def _get_bert_embeddings(self):
 
-        if os.path.exists('bert_embeddings.npy'):
-            bert_embeddings = np.load('bert_embeddings.npy')
-            self.bert_vectors = bert_embeddings
-            return
+        # if os.path.exists('bert_embeddings.npy'):
+        #     bert_embeddings = np.load('bert_embeddings.npy')
+        #     self.bert_vectors = bert_embeddings
+        #     return
         
         tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
         model = BertModel.from_pretrained('bert-base-uncased')
@@ -132,7 +132,7 @@ class TextDataset(Dataset):
             all_embeddings.append(cls_embeddings.cpu().numpy())
 
         self.bert_vectors = np.concatenate(all_embeddings, axis=0)
-        np.save('bert_embeddings.npy', self.bert_vectors)
+        # np.save('bert_embeddings.npy', self.bert_vectors)
     
     def _build_vocab_and_idf(self):
         vectorizer = TfidfVectorizer(input='filename', stop_words='english')
