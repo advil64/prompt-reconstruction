@@ -15,7 +15,7 @@ nltk.download('stopwords')
 nltk.download('punkt')
 
 class TextDatasetDoc2Vec(Dataset):
-    def __init__(self, root_dir, vector_size=1000, window=5, min_count=1, workers=4, epochs=50):
+    def __init__(self, root_dir, use_pretrained=True, vector_size=1000, window=5, min_count=1, workers=4, epochs=50):
         self.samples = []
         self.labels = []
         self.root_dir = root_dir
@@ -27,7 +27,8 @@ class TextDatasetDoc2Vec(Dataset):
         self._load_dataset()
 
         # Train Doc2Vec model on the complete dataset
-        self._train_doc2vec(vector_size, window, min_count, workers, epochs)
+        if not use_pretrained:
+            self._train_doc2vec(vector_size, window, min_count, workers, epochs)
 
     def _load_dataset(self):
         for folder_dir in os.listdir(self.root_dir):
